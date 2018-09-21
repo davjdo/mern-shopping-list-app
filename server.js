@@ -1,8 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const config = require('./config/keys').get(process.env.NODE_ENV);
 const bodyParser = require('body-parser');
 const path = require('path');
-
 const items = require('./routes/api/items');
 
 const app = express();
@@ -10,15 +10,12 @@ const app = express();
 // BodyParser Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-// DB Config
 mongoose.Promise = global.Promise;
-const db = require('./config/keys').mongoURI;
 
 // Connect to Mongo
 mongoose
   .connect(
-    db,
+    config.DATABASE,
     { useNewUrlParser: true }
   ) // Adding new mongo url parser
   .then(() => console.log('Mongo DB Connected ...'))
